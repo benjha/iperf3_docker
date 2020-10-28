@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: iperf3-server
+  name: iperf3-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: iperf3-server
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: iperf3-server
+    spec:
+      containers:
+      - image: image-registry.openshift-image-registry.svc:5000/csc434/iperf3docker
+        name: iperf3docker
+        args: ['-s', '-p', '23232']
+        resources:
+          limits:
+            cpu: '1'
+            memory: 1Gi
+          requests:
+            cpu: '1'
+            memory: 1Gi
+        tty: true
+        stdin: true
+        serviceAccount: default
+        ports:
+        - containerPort: 23232
+          name: server
+    terminationGracePeriodSeconds: 5  
+status: {}
